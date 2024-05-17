@@ -31,7 +31,7 @@ const server = new http.Server(
     const { aps, alarm, date, device, locale, recipientList } = data;
     const t = await i18next.changeLanguage(locale || "en");
     const a = t(`Alarm.${alarm.key}`);
-    const mesg = `AL${alarm.id} ${a}`;
+    const mesg = `${date} ${device.key} AL${alarm.id} ${a}`;
     const emailHtml = render(
       <Email
         aps={aps}
@@ -59,4 +59,4 @@ const server = new http.Server(
   })
 );
 
-server.listen(3000);
+server.listen(process.env.HTTP_PORT);

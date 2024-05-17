@@ -42,7 +42,7 @@ const Email = ({ aps, mesg, recipientList, url }) => {
               </Row>
             </Section>
             <Text className="text-black text-[14px] leading-[24px]">
-              Automatic Parking System <strong>{aps}</strong>
+              Automatic Parking System <strong className="capitalize">{aps}</strong>
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               {mesg}
