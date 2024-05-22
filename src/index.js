@@ -30,7 +30,7 @@ const server = new http.Server(
     const data = await json(req);
     const { aps, alarm, date, device, locale, recipientList } = data;
     const t = await i18next.changeLanguage(locale || "en");
-    const a = t(`Alarm.${alarm.key}`);
+    const a = t(`Alarm.${alarm.key}, Alarm.${alarm.query}`);
     const mesg = `${date} ${device.key} AL${alarm.id} ${a}`;
     const emailHtml = render(
       <Email
