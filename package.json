@@ -7,6 +7,7 @@
     "build": "babel src/** -d dist",
     "dev": "npm run build && nodemon dist/index.js",
     "start": "npm run build && node dist/index.js",
+    "ni": "npm run build && node dist/nextIntl.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pm2": "pm2 start dist/index.js --name parkbot-notifier"
   },
@@ -27,6 +28,7 @@
     "dotenv": "^16.4.5",
     "i18next": "^23.11.3",
     "i18next-fs-backend": "^2.3.1",
-    "micro": "^10.0.1"
+    "micro": "^10.0.1",
+    "next-intl": "latest"
   }
 }
