@@ -1,28 +1,25 @@
 require("dotenv").config();
-import fs from "fs/promises";
 import * as http from "http";
-import { createTranslator } from "next-intl";
+import i18next from "i18next";
+import Backend from "i18next-fs-backend";
 import { serve, send, json } from "micro";
 import React from "react";
 import { render } from "@react-email/render";
 import sendgrid from "@sendgrid/mail";
-import Email from "./Email";
+import Email from "./Email"
 
-const getTranslation = async (alarm, locale) => {
-  try {
-    const data = await fs.readFile(
-      `../../github/parkbot-dashboard/messages/${locale}.json`,
-      "utf8"
-    );
-    const json = JSON.parse(data);
-    const messages = json.Alarm;
-    const t = createTranslator({ locale, messages });
-    const a = t(alarm.key, alarm.query);
-    return a;
-  } catch (error) {
-    console.error("Error occurred while reading file:", error);
-  }
+const i18nextOptions = {
+  // initImmediate: false,
+  lng: "en",
+  fallbackLng: "en",
+  backend: { loadPath: "../../github/parkbot-dashboard/messages/{{lng}}.json" },
 };
+
+const init = async () => {
+  await i18next.use(Backend).init(i18nextOptions);
+};
+
+init();
 
 const baseUrl = process.env.SOTEFINSERVICE_URL
   ? `${process.env.SOTEFINSERVICE_URL}`
@@ -32,8 +29,9 @@ const server = new http.Server(
   serve(async (req, res) => {
     const data = await json(req);
     const { aps, alarm, date, device, locale, recipientList } = data;
-    const info = await getTranslation(alarm, locale);
-    const mesg = `${date} ${device.key} AL${alarm.id} ${info}`;
+    const t = await i18next.changeLanguage(locale || "en");
+    const a = t(`Alarm.${alarm.key}, Alarm.${alarm.query}`);
+    const mesg = `${date} ${device.key} AL${alarm.id} ${a}`;
     const emailHtml = render(
       <Email
         aps={aps}
